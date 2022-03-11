@@ -51,13 +51,21 @@ func hitURL(url string) error{
 */
 
 func main(){
-	go count("a")
-	count("b")
+	channel := make(chan bool)
+
+	people := [2]string{"a","b"}
+
+	for _,person :=range people{
+		go count(person, channel)
+	}
+	fmt.Println(<-channel)
+	fmt.Println(<-channel)
 }
 
-func count(name string){
-	for i:=0; i<10;i++{
+func count(name string, channel chan bool){
+	for i:=0; i<4;i++{
 		fmt.Println(name, i)
 		time.Sleep(time.Second)
 	}
+	channel<-true
 }
