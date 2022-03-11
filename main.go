@@ -1,11 +1,11 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"net/http"
+	"time"
 )
 
+/*
 var errRequestFailed=errors.New("request failed")
 
 func main(){
@@ -47,4 +47,17 @@ func hitURL(url string) error{
 		return errRequestFailed
 	}
 	return nil
+}
+*/
+
+func main(){
+	go count("a")
+	count("b")
+}
+
+func count(name string){
+	for i:=0; i<10;i++{
+		fmt.Println(name, i)
+		time.Sleep(time.Second)
+	}
 }
