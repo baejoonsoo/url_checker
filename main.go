@@ -9,6 +9,7 @@ import (
 var errRequestFailed=errors.New("request failed")
 
 func main(){
+	results := map[string]string{}
 	urls := []string{
 		"https://www.airbnb.com/",
 		"https://www.google.com/",
@@ -22,7 +23,18 @@ func main(){
 	}
 
 	for _,url :=range urls{
-		hitURL(url)
+		result := "OK"
+		err := hitURL(url)
+
+		if err !=nil{
+			result="FAILED"
+		}
+
+		results[url]=result
+	}
+
+	for url, res := range results{
+		fmt.Println(url, res)
 	}
 }
 
@@ -31,6 +43,7 @@ func hitURL(url string) error{
 	res, err:= http.Get(url)
 
 	if err!=nil|| res.StatusCode>=400{
+		fmt.Println(err, res.StatusCode)
 		return errRequestFailed
 	}
 	return nil
