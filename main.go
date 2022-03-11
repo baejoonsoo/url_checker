@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -9,7 +10,7 @@ var errRequestFailed=errors.New("request failed")
 
 func main(){
 	urls := []string{
-		"https://www.aribnb.com/",
+		"https://www.airbnb.com/",
 		"https://www.google.com/",
 		"https://www.amazon.com/",
 		"https://www.reddit.com/",
@@ -26,9 +27,10 @@ func main(){
 }
 
 func hitURL(url string) error{
+	fmt.Println("Checking",url)
 	res, err:= http.Get(url)
 
-	if err==nil|| res.StatusCode>=400{
+	if err!=nil|| res.StatusCode>=400{
 		return errRequestFailed
 	}
 	return nil
