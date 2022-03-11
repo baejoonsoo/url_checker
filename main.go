@@ -2,14 +2,19 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"net/http"
 )
 
-/*
-var errRequestFailed=errors.New("request failed")
+// var errRequestFailed=errors.New("request failed")
+
+type result struct {
+	url string
+	status string
+}
 
 func main(){
-	results := map[string]string{}
+	channel :=make(chan result)
+	// results := map[string]string{}
 	urls := []string{
 		"https://www.airbnb.com/",
 		"https://www.google.com/",
@@ -23,33 +28,26 @@ func main(){
 	}
 
 	for _,url :=range urls{
-		result := "OK"
-		err := hitURL(url)
-
-		if err !=nil{
-			result="FAILED"
-		}
-
-		results[url]=result
-	}
-
-	for url, res := range results{
-		fmt.Println(url, res)
+		go hitURL(url, channel)
 	}
 }
 
-func hitURL(url string) error{
+func hitURL(url string, channel chan<- result) {
 	fmt.Println("Checking",url)
 	res, err:= http.Get(url)
 
-	if err!=nil|| res.StatusCode>=400{
-		fmt.Println(err, res.StatusCode)
-		return errRequestFailed
-	}
-	return nil
-}
-*/
+	status := "OK"
 
+	if err!=nil || res.StatusCode>=400{
+		status = "FAILED"
+	}
+	channel<-result{url:url,status: status}
+
+	
+}
+
+
+/*
 func main(){
 	channel := make(chan string)
 
@@ -58,7 +56,7 @@ func main(){
 	for _,person :=range people{
 		go count(person, channel)
 	}
-	
+
 	for i := 0; i<len(people);i++{
 		fmt.Println(<-channel)
 	}
@@ -72,3 +70,4 @@ func count(name string, channel chan string){
 	}
 	channel<-name
 }
+*/
